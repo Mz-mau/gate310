@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Question } from '../types';
 import { INITIAL_QUESTIONS } from '../data/questions';
-import { ShieldCheck, ArrowRight, Lightbulb } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Lightbulb, Target } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const BaselineTest: React.FC = () => {
-  const { recordAttempt, completeBaseline, setActiveTab } = useApp();
+  const { recordAttempt, completeBaseline, setActiveTab, profile } = useApp();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -62,31 +62,31 @@ export const BaselineTest: React.FC = () => {
     }
   };
 
-  if (testFinished) {
+  if (testFinished || profile.baselineCompleted) {
     return (
-      <div style={{ maxWidth: '800px', margin: '3rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
+      <div style={{ maxWidth: '850px', margin: '3rem auto', padding: '0 1.5rem', textAlign: 'center' }}>
         <div className="glass-panel-active" style={{ padding: '3rem 2rem' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--emerald-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-            <ShieldCheck size={36} color="var(--emerald-accent)" />
+          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(236, 72, 153, 0.2)', border: '1px solid var(--pink-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+            <ShieldCheck size={36} color="var(--pink-accent)" />
           </div>
 
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>
             Baseline Assessment Complete
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: '550px', margin: '0 auto 2rem' }}>
-            Your GATE Performance Profile has been generated. Your initial estimated score index is active.
+          <p style={{ color: 'var(--text-main)', fontSize: '1rem', maxWidth: '550px', margin: '0 auto 2rem' }}>
+            Your GATE Performance Profile has been generated and saved.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '2rem', textAlign: 'left' }}>
             <div className="glass-panel" style={{ padding: '1.25rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Estimated Baseline Score</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)' }}>
-                268 <span style={{ fontSize: '1rem', color: 'var(--text-dim)' }}>/ 350</span>
+              <div style={{ fontSize: '0.8rem', color: 'var(--pink-light)' }}>Current Estimated Index</div>
+              <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)' }}>
+                {profile.estimatedScore} <span style={{ fontSize: '1rem', color: 'var(--text-dim)' }}>/ 350</span>
               </div>
             </div>
             <div className="glass-panel" style={{ padding: '1.25rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Target Goal</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--purple-accent)', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--pink-light)' }}>Target Score</div>
+              <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--purple-accent)', fontFamily: 'var(--font-mono)' }}>
                 310+ READY
               </div>
             </div>
@@ -108,27 +108,31 @@ export const BaselineTest: React.FC = () => {
     <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '0 1.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px' }}>
             BASELINE ASSESSMENT • QUESTION {currentIndex + 1} OF {baselineQuestions.length}
           </div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>
             {currentQuestion.domain.toUpperCase()} • {currentQuestion.skill}
           </h2>
         </div>
-        <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid var(--border-color)', padding: '0.4rem 0.85rem', borderRadius: '6px', fontSize: '0.85rem', color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ background: 'rgba(236, 72, 153, 0.15)', border: '1px solid var(--border-color)', padding: '0.4rem 0.85rem', borderRadius: '6px', fontSize: '0.85rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)' }}>
           Difficulty: {currentQuestion.difficulty}/10
         </div>
       </div>
 
       <div className="glass-panel" style={{ padding: '2rem', marginBottom: '1.5rem' }}>
+        {/* NARRATIVE / STATEMENT BOX */}
         {currentQuestion.passage && (
-          <div style={{ background: 'rgba(15, 23, 42, 0.7)', borderLeft: '3px solid var(--cyan-accent)', padding: '1.25rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          <div style={{ background: 'rgba(26, 16, 38, 0.9)', borderLeft: '4px solid var(--pink-accent)', padding: '1.25rem', borderRadius: '6px', marginBottom: '1.5rem', fontSize: '0.95rem', color: '#fff', lineHeight: 1.6 }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+              📖 READING PASSAGE / STATEMENT NARRATIVE
+            </div>
             {currentQuestion.passage}
           </div>
         )}
 
         {currentQuestion.visualPattern && (
-          <div style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--border-color)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center' }}>
+          <div style={{ background: 'rgba(38, 20, 54, 0.8)', border: '1px solid var(--border-color)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--purple-accent)', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
               VISUAL REASONING SCHEMA
             </div>
@@ -160,7 +164,7 @@ export const BaselineTest: React.FC = () => {
                 padding: '1rem 1.25rem',
                 borderRadius: '8px',
                 border: '1px solid var(--border-color)',
-                background: 'rgba(15, 23, 42, 0.5)',
+                background: 'rgba(26, 16, 38, 0.6)',
                 color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 textAlign: 'left',
@@ -169,19 +173,19 @@ export const BaselineTest: React.FC = () => {
               };
 
               if (selectedOption === opt) {
-                btnStyle.border = '1px solid var(--cyan-accent)';
-                btnStyle.background = 'rgba(56, 189, 248, 0.15)';
+                btnStyle.border = '1px solid var(--pink-accent)';
+                btnStyle.background = 'rgba(236, 72, 153, 0.2)';
                 btnStyle.color = '#fff';
               }
 
               if (showExplanation) {
                 if (opt === currentQuestion.correctAnswer) {
                   btnStyle.border = '1px solid var(--emerald-accent)';
-                  btnStyle.background = 'rgba(16, 185, 129, 0.2)';
+                  btnStyle.background = 'rgba(16, 185, 129, 0.25)';
                   btnStyle.color = '#fff';
                 } else if (selectedOption === opt) {
                   btnStyle.border = '1px solid var(--rose-accent)';
-                  btnStyle.background = 'rgba(244, 63, 94, 0.2)';
+                  btnStyle.background = 'rgba(244, 63, 94, 0.25)';
                 }
               }
 
@@ -191,7 +195,7 @@ export const BaselineTest: React.FC = () => {
                   onClick={() => handleOptionSelect(opt)}
                   style={btnStyle}
                 >
-                  <span style={{ fontWeight: 700, marginRight: '0.75rem', color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontWeight: 700, marginRight: '0.75rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)' }}>
                     {String.fromCharCode(65 + idx)}.
                   </span>
                   {opt}
@@ -203,7 +207,7 @@ export const BaselineTest: React.FC = () => {
 
         {!showExplanation && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Confidence Level:</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--pink-light)' }}>Confidence Level:</div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {(['low', 'medium', 'high'] as const).map(level => (
                 <button
@@ -214,8 +218,8 @@ export const BaselineTest: React.FC = () => {
                     borderRadius: '4px',
                     fontSize: '0.75rem',
                     textTransform: 'capitalize',
-                    border: confidence === level ? '1px solid var(--cyan-accent)' : '1px solid var(--border-color)',
-                    background: confidence === level ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
+                    border: confidence === level ? '1px solid var(--pink-accent)' : '1px solid var(--border-color)',
+                    background: confidence === level ? 'rgba(236, 72, 153, 0.25)' : 'transparent',
                     color: confidence === level ? '#fff' : 'var(--text-muted)',
                     cursor: 'pointer'
                   }}
@@ -253,12 +257,12 @@ export const BaselineTest: React.FC = () => {
             {selectedOption === currentQuestion.correctAnswer ? 'Diagnosis: Correct Reasoning' : 'Diagnosis: Pattern Recognition Error'}
           </div>
 
-          <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem', whiteSpace: 'pre-line', lineHeight: 1.6 }}>
+          <div style={{ fontSize: '0.9rem', color: 'var(--text-main)', marginBottom: '1rem', whiteSpace: 'pre-line', lineHeight: 1.6 }}>
             {currentQuestion.explanation}
           </div>
 
           {currentQuestion.commonTrap && (
-            <div style={{ fontSize: '0.8rem', color: 'var(--amber-accent)', background: 'rgba(245, 158, 11, 0.1)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--amber-accent)', background: 'rgba(245, 158, 11, 0.15)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>
               <strong>Common Trap:</strong> {currentQuestion.commonTrap}
             </div>
           )}
