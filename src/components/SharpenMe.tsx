@@ -86,7 +86,13 @@ export const SharpenMe: React.FC = () => {
       isCorrect,
       timeSpentSeconds: timeSpent,
       hintsUsed: hintStage,
-      errorCategory
+      errorCategory,
+      questionSnapshot: {
+        prompt: currentQuestion.prompt,
+        passage: currentQuestion.passage,
+        correctAnswer: currentQuestion.correctAnswer,
+        explanation: currentQuestion.explanation
+      }
     });
 
     setShowExplanation(true);
@@ -102,7 +108,7 @@ export const SharpenMe: React.FC = () => {
       <div className="glass-panel" style={{ padding: '1.25rem 1.5rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Crosshair size={20} color="var(--cyan-accent)" />
+            <Crosshair size={20} color="var(--pink-accent)" />
             <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#fff' }}>
               SHARPEN ME <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>• Adaptive Weakness Hunter</span>
             </h2>
@@ -120,8 +126,8 @@ export const SharpenMe: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.5rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-            <div style={{ fontSize: '0.7rem', color: 'var(--cyan-accent)', textTransform: 'uppercase' }}>Streak</div>
+          <div style={{ background: 'rgba(236, 72, 153, 0.15)', padding: '0.5rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--pink-accent)', textTransform: 'uppercase' }}>Streak</div>
             <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-mono)' }}>
               {sessionStreak} 🔥
             </div>
@@ -141,8 +147,8 @@ export const SharpenMe: React.FC = () => {
               fontSize: '0.85rem',
               fontWeight: currentDomain === dom ? 700 : 500,
               textTransform: 'capitalize',
-              border: currentDomain === dom ? '1px solid var(--cyan-accent)' : '1px solid var(--border-color)',
-              background: currentDomain === dom ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.4)',
+              border: currentDomain === dom ? '1px solid var(--pink-accent)' : '1px solid var(--border-color)',
+              background: currentDomain === dom ? 'rgba(236, 72, 153, 0.2)' : 'rgba(26, 16, 38, 0.5)',
               color: currentDomain === dom ? '#fff' : 'var(--text-muted)',
               cursor: 'pointer',
               transition: 'all 0.15s ease'
@@ -155,7 +161,7 @@ export const SharpenMe: React.FC = () => {
 
       <div className="glass-panel" style={{ padding: '2rem', marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '1px' }}>
             SKILL: {currentQuestion.skill}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
@@ -164,13 +170,16 @@ export const SharpenMe: React.FC = () => {
         </div>
 
         {currentQuestion.passage && (
-          <div style={{ background: 'rgba(15, 23, 42, 0.7)', borderLeft: '3px solid var(--cyan-accent)', padding: '1.25rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          <div style={{ background: 'rgba(26, 16, 38, 0.9)', borderLeft: '4px solid var(--pink-accent)', padding: '1.25rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.95rem', color: '#fff', lineHeight: 1.6 }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+              📖 READING PASSAGE / STATEMENT NARRATIVE
+            </div>
             {currentQuestion.passage}
           </div>
         )}
 
         {currentQuestion.visualPattern && (
-          <div style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid var(--border-color)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center' }}>
+          <div style={{ background: 'rgba(38, 20, 54, 0.8)', border: '1px solid var(--border-color)', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'center' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--purple-accent)', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
               VISUAL REASONING SCHEMA
             </div>
@@ -202,7 +211,7 @@ export const SharpenMe: React.FC = () => {
                 padding: '1rem 1.25rem',
                 borderRadius: '8px',
                 border: '1px solid var(--border-color)',
-                background: 'rgba(15, 23, 42, 0.5)',
+                background: 'rgba(26, 16, 38, 0.6)',
                 color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 textAlign: 'left',
@@ -211,19 +220,19 @@ export const SharpenMe: React.FC = () => {
               };
 
               if (selectedOption === opt) {
-                btnStyle.border = '1px solid var(--cyan-accent)';
-                btnStyle.background = 'rgba(56, 189, 248, 0.15)';
+                btnStyle.border = '1px solid var(--pink-accent)';
+                btnStyle.background = 'rgba(236, 72, 153, 0.2)';
                 btnStyle.color = '#fff';
               }
 
               if (showExplanation) {
                 if (opt === currentQuestion.correctAnswer) {
                   btnStyle.border = '1px solid var(--emerald-accent)';
-                  btnStyle.background = 'rgba(16, 185, 129, 0.2)';
+                  btnStyle.background = 'rgba(16, 185, 129, 0.25)';
                   btnStyle.color = '#fff';
                 } else if (selectedOption === opt) {
                   btnStyle.border = '1px solid var(--rose-accent)';
-                  btnStyle.background = 'rgba(244, 63, 94, 0.2)';
+                  btnStyle.background = 'rgba(244, 63, 94, 0.25)';
                 }
               }
 
@@ -233,7 +242,7 @@ export const SharpenMe: React.FC = () => {
                   onClick={() => !showExplanation && setSelectedOption(opt)}
                   style={btnStyle}
                 >
-                  <span style={{ fontWeight: 700, marginRight: '0.75rem', color: 'var(--cyan-accent)', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontWeight: 700, marginRight: '0.75rem', color: 'var(--pink-accent)', fontFamily: 'var(--font-mono)' }}>
                     {String.fromCharCode(65 + idx)}.
                   </span>
                   {opt}
@@ -276,7 +285,7 @@ export const SharpenMe: React.FC = () => {
             </div>
           )}
 
-          <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1rem', whiteSpace: 'pre-line', lineHeight: 1.6 }}>
+          <div style={{ fontSize: '0.9rem', color: 'var(--text-main)', marginBottom: '1rem', whiteSpace: 'pre-line', lineHeight: 1.6 }}>
             {currentQuestion.explanation}
           </div>
 

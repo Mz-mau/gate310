@@ -45,6 +45,13 @@ export interface QuestionAttempt {
   errorCategory?: ErrorCategory;
   timestamp: string;
   hintsUsed: number;
+  // Preserved snapshot for dynamic generated questions
+  questionSnapshot?: {
+    prompt: string;
+    passage?: string;
+    correctAnswer: string;
+    explanation: string;
+  };
 }
 
 export interface SkillMastery {
@@ -100,7 +107,7 @@ export interface WritingSubmission {
   userText: string;
   timestamp: string;
   feedback: {
-    overallScore: number; // out of 100
+    overallScore: number;
     argumentScore: number;
     clarityScore: number;
     vocabularyScore: number;
